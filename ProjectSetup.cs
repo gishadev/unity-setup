@@ -36,19 +36,11 @@ namespace gishadev
             {
                 "com.unity.2d.animation",
                 "com.unity.cinemachine",
+                "https://github.com/KyryloKuzyk/primetween.git#1.3.2",
                 "com.unity.inputsystem"
             });
         }
 
-        [MenuItem("Tools/Setup/Import PrimeTween")]
-        static void ImportPrimeTween()
-        {
-            Packages.InstallPackages(new[]
-            {
-                "https://github.com/KyryloKuzyk/primetween.git#1.3.2"
-            });
-        }
-        
         [MenuItem("Tools/Setup/Import polishing tools")]
         static void ImportPolishingTools()
         {
