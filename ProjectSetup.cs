@@ -40,13 +40,21 @@ namespace gishadev
             });
         }
 
+        [MenuItem("Tools/Setup/Import PrimeTween")]
+        static void ImportPrimeTween()
+        {
+            Packages.InstallPackages(new[]
+            {
+                "https://github.com/KyryloKuzyk/primetween.git#1.3.2"
+            });
+        }
+        
         [MenuItem("Tools/Setup/Import polishing tools")]
         static void ImportPolishingTools()
         {
             // Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage", "Kyrylo Kuzyk/Editor ExtensionsAnimation");
             Packages.InstallPackages(new[]
             {
-                "https://github.com/KyryloKuzyk/primetween.git#1.3.2",
                 "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.9",
                 "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
                 "https://github.com/gishadev/gishadev-tools-polish.git"
