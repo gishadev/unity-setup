@@ -17,9 +17,10 @@ namespace gishadev
         [MenuItem("Tools/Setup/Create Folders")]
         public static void CreateFolders()
         {
-            Folders.Create("_Project", "Materials", "Prefabs", "Scripts", "Settings");
+            Folders.Create("_Project", "Materials", "Prefabs", "Scripts");
             Refresh();
             Folders.Move("_Project", "Scenes");
+            Folders.Move("_Project", "Settings");
             Folders.Delete("TutorialInfo");
             Refresh();
             MoveAsset("Assets/InputSystem_Actions.inputactions",
