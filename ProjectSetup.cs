@@ -20,6 +20,7 @@ namespace gishadev
             Folders.Create("_Project", "Materials", "Prefabs", "Scripts", "Settings");
             Refresh();
             Folders.Move("_Project", "Scenes");
+            Folders.Delete("TutorialInfo");
             Refresh();
             MoveAsset("Assets/InputSystem_Actions.inputactions",
                 "Assets/_Project/Settings/InputSystem_Actions.inputactions");
