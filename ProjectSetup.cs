@@ -46,7 +46,7 @@ namespace gishadev
             // Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage", "Kyrylo Kuzyk/Editor ExtensionsAnimation");
             Packages.InstallPackages(new[]
             {
-                "com.kyrylokuzyk.primetween",
+                "https://github.com/KyryloKuzyk/primetween.git#1.3.2",
                 "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.9",
                 "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
                 "https://github.com/gishadev/gishadev-tools-polish.git"
