@@ -43,7 +43,7 @@ namespace gishadev
         [MenuItem("Tools/Setup/Import polishing tools")]
         static void ImportPolishingTools()
         {
-            Assets.ImportAsset("PrimeTween · High-Performance Animations and Sequences.unitypackage", "Plugins/PrimeTween");
+            Assets.ImportAsset("PrimeTween · High-Performance Animations and Sequences.unitypackage", "Plugins");
             Packages.InstallPackages(new[]
             {
                 "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.9",
