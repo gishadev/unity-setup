@@ -43,7 +43,7 @@ namespace gishadev
         [MenuItem("Tools/Setup/Import polishing tools")]
         static void ImportPolishingTools()
         {
-            Assets.ImportAsset("PrimeTween · High-Performance Animations and Sequences.unitypackage", "Plugins");
+            Assets.ImportAsset("PrimeTween · High-Performance Animations and Sequences.unitypackage", "Kyrylo Kuzyk/Editor ExtensionsAnimation");
             Packages.InstallPackages(new[]
             {
                 "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.9",
@@ -65,14 +65,14 @@ namespace gishadev
         [MenuItem("Tools/Setup/Import Odin")]
         static void ImportOdin()
         {
-            Assets.ImportAsset("Odin Inspector and Serializer.unitypackage", "Plugins/Sirenix");
+            Assets.ImportAsset("Odin Inspector and Serializer.unitypackage", "Sirenix/Editor ExtensionsSystem");
         }
         
         [MenuItem("Tools/Setup/Import Editor Helpers")]
         static void ImportEditorHelpers()
         {
-            Assets.ImportAsset("vFolders 2.unitypackage", "vFolders");
-            Assets.ImportAsset("vFavorites 2.unitypackage", "vFavorites");
+            Assets.ImportAsset("vFolders 2.unitypackage", "kubacho lab/Editor ExtensionsUtilities");
+            Assets.ImportAsset("vFavorites 2.unitypackage", "kubacho lab/Editor ExtensionsUtilities");
         }
 
         static class Assets
