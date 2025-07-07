@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
-using Codice.Utils;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -32,7 +32,8 @@ namespace gishadev
         [MenuItem("Tools/Setup/Import Essentials")]
         static void ImportEssentials()
         {
-            Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage", "Kyrylo Kuzyk/Editor ExtensionsAnimation");
+            Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage",
+                "Kyrylo Kuzyk/Editor ExtensionsAnimation");
 
             Packages.InstallPackages(new[]
             {
@@ -46,6 +47,12 @@ namespace gishadev
         static void ImportPolishingTools()
         {
             // Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage", "Kyrylo Kuzyk/Editor ExtensionsAnimation");
+            Folders.CreateEnum("MusicAudioEnum");
+            Folders.CreateEnum("SFXAudioEnum");
+            Folders.CreateEnum("SoundEffectsEnum");
+            Folders.CreateEnum("VisualEffectsEnum");
+            Folders.CreateEnum("OtherPoolEnum");
+
             Packages.InstallPackages(new[]
             {
                 "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.9",
@@ -63,13 +70,13 @@ namespace gishadev
                 "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
             });
         }
-        
+
         [MenuItem("Tools/Setup/Import Odin")]
         static void ImportOdin()
         {
             Assets.ImportAsset("Odin Inspector and Serializer.unitypackage", "Sirenix/Editor ExtensionsSystem");
         }
-        
+
         [MenuItem("Tools/Setup/Import Editor Helpers")]
         static void ImportEditorHelpers()
         {
@@ -175,6 +182,23 @@ namespace gishadev
 
                 if (IsValidFolder(pathToDelete))
                     DeleteAsset(pathToDelete);
+            }
+
+            public static void CreateEnum(string enumName)
+            {
+                string path = $"Assets/Generated/{enumName}.cs";
+
+                var str = new StringBuilder();
+                str.AppendLine();
+                str.AppendLine($"public enum {enumName}");
+                str.AppendLine("{");
+                str.AppendLine("}");
+
+                Directory.CreateDirectory(GetDirectoryName(path) ?? string.Empty);
+                File.WriteAllText(path, str.ToString());
+                ImportAsset(path);
+
+                Debug.Log($"[EnumGenerator] Created empty enum: {path}");
             }
         }
     }
