@@ -63,16 +63,6 @@ namespace gishadev
             });
         }
 
-        [MenuItem("Tools/Setup/Import Walking Sim Template")]
-        static void ImportWalkingSim()
-        {
-            Packages.InstallPackages(new[]
-            {
-                "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.9",
-                "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
-            });
-        }
-
         [MenuItem("Tools/Setup/Import Odin")]
         static void ImportOdin()
         {
