@@ -32,8 +32,8 @@ namespace gishadev
         [MenuItem("Tools/Setup/Import Essentials")]
         static void ImportEssentials()
         {
-            Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage",
-                "Kyrylo Kuzyk/Editor ExtensionsAnimation");
+            // Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage",
+            //     "Kyrylo Kuzyk/Editor ExtensionsAnimation");
 
             Packages.InstallPackages(new[]
             {
@@ -46,7 +46,9 @@ namespace gishadev
         [MenuItem("Tools/Setup/Import polishing tools")]
         static void ImportPolishingTools()
         {
-            // Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage", "Kyrylo Kuzyk/Editor ExtensionsAnimation");
+            Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage",
+                "Kyrylo Kuzyk/Editor ExtensionsAnimation");
+            
             Folders.CreateEnum("MusicAudioEnum");
             Folders.CreateEnum("SFXAudioEnum");
             Folders.CreateEnum("SoundEffectsEnum");
