@@ -1,10 +1,10 @@
 {
     "name": "unity-setup",
     "rootNamespace": "",
-    "references": [
-        "GUID:4b84427fd7ace4b4cb623ef8a46124ed"
+    "references": [],
+    "includePlatforms": [
+        "Editor"
     ],
-    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
