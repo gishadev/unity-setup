@@ -59,7 +59,7 @@ namespace gishadev
             {
                 "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.9",
                 "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
-                "https://github.com/gishadev/gishadev-tools-polish.git"
+                "https://github.com/gishadev/tools-polish.git"
             });
         }
 
