@@ -89,6 +89,11 @@ namespace gishadev
 #elif UNITY_EDITOR_OSX
                     string homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                     basePath = Combine(homeDirectory, "Library/Unity/Asset Store-5.x");
+#else
+                string homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                basePath = Combine(EditorPrefs.GetString("AssetStoreCacheRootPath",
+                        Combine(homeDirectory, ".local/share/unity3d")),
+                    "Asset Store-5.x");
 #endif
 
                 asset = asset.EndsWith(".unitypackage") ? asset : asset + ".unitypackage";
