@@ -67,8 +67,13 @@ namespace gishadev
         async void Run(SetupStep step)
         {
             _running = true;
-
             Log($"── {step.Name} ──");
+
+            // Installing a package (e.g. VContainer, tools-polish) that brings new scripts queues a
+            // domain reload once it compiles. That reload wipes this running method mid-flight, so any
+            // later package in the same step (e.g. tools-polish right after VContainer) never installs.
+            // Locking defers the reload until we're done with the whole step.
+            EditorApplication.LockReloadAssemblies();
             try
             {
                 await step.Run(Log);
@@ -77,6 +82,10 @@ namespace gishadev
             catch (Exception e)
             {
                 Log($"✗ {step.Name} failed: {e.Message}");
+            }
+            finally
+            {
+                EditorApplication.UnlockReloadAssemblies();
             }
 
             _running = false;
