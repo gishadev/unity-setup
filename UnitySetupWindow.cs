@@ -25,10 +25,11 @@ namespace gishadev
         void OnGUI()
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Unity Setup", EditorStyles.boldLabel);
+            GUILayout.Label("Select what you want to set up", EditorStyles.boldLabel);
             GUILayout.FlexibleSpace();
             if (Logo != null)
                 GUILayout.Label(Logo, GUILayout.Width(48), GUILayout.Height(48));
+            
             GUILayout.EndHorizontal();
 
             GUILayout.Space(4);
