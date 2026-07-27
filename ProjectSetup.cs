@@ -37,7 +37,7 @@ namespace gishadev
                 ImportEssentials),
             new("Import Main Tools",
                 "VContainer, PrimeTween, com.gishadev.tools and generated pool enums.",
-                ImportPolishingTools),
+                ImportMainTools),
             new("Import Odin",
                 "Odin Inspector & Serializer (from Asset Store cache).",
                 ImportOdin),
@@ -78,7 +78,7 @@ namespace gishadev
             await Assets.ImportTmpEssentials(log);
         }
 
-        static async Task ImportPolishingTools(Action<string> log)
+        static async Task ImportMainTools(Action<string> log)
         {
             await Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage",
                 "Kyrylo Kuzyk/Editor ExtensionsAnimation", log);
@@ -92,7 +92,7 @@ namespace gishadev
             await Packages.InstallPackages(new[]
             {
                 "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.9",
-                "https://github.com/gishadev/tools-polish.git"
+                "https://github.com/gishadev/gishadev-tools.git"
             }, log);
         }
 
