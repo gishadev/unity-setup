@@ -1,3 +1,7 @@
+## [1.4.0] - 2026-07-27
+### Removed
+- `Folders.CreateExtensionsClass` — `com.gishadev.tools` 1.5.0 regenerates that file itself alongside the enums, so setup writing its own copy was the second writer that let the two drift apart. Setup still creates the enum stubs
+
 ## [1.3.0] - 2026-07-27
 ### Added
 - `Folders.CreateExtensionsClass` now generates `GeneratedExtensionMethods.cs` as part of "Import Main Tools" — moved here from `gishadev.tools.Core.CodeGenerator` since it's static, one-time scaffolding rather than something that needs to re-run on every pool/audio data edit

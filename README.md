@@ -18,7 +18,7 @@ Open **Tools → gishadev → Unity Setup**. Each step below has its own "Run" b
 
 - **Create Folders** — scaffolds the standard `_Project` folder structure (Materials, Prefabs, Scripts, Scenes, Settings) and cleans up the default template clutter
 - **Import Essentials** — 2D Animation, Cinemachine, Input System, UniTask, TextMeshPro
-- **Import Main Tools** — PrimeTween, VContainer, [`com.gishadev.tools`](https://github.com/gishadev/gishadev-tools), plus the generated pool/audio enums and extension methods it needs
+- **Import Main Tools** — PrimeTween, VContainer, [`com.gishadev.tools`](https://github.com/gishadev/gishadev-tools), plus stubs for the generated pool/audio enums
 - **Import Odin** — Odin Inspector & Serializer, imported from your local Asset Store cache
 - **Import Editor Helpers** — vFolders 2 and vFavorites 2, also from the Asset Store cache
 
