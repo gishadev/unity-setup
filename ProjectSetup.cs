@@ -85,8 +85,8 @@ namespace gishadev
 
             Folders.CreateEnum("MusicAudioEnum", log);
             Folders.CreateEnum("SFXAudioEnum", log);
-            Folders.CreateEnum("SoundEffectsEnum", log);
-            Folders.CreateEnum("VisualEffectsEnum", log);
+            Folders.CreateEnum("SFXPoolEnum", log);
+            Folders.CreateEnum("VFXPoolEnum", log);
             Folders.CreateEnum("OtherPoolEnum", log);
 
             await Packages.InstallPackages(new[]
