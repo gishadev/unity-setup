@@ -1,3 +1,7 @@
+## [1.2.0] - 2026-07-27
+### Changed
+- Simplified the Unity Setup window: removed the checkbox multi-select and batched "Run Selected" (which was buggy) in favor of one "Run" button per step that runs immediately on its own
+
 ## [1.1.1] - 2026-07-27
 ### Changed
 - Menu moved to `Tools/gishadev/Unity Setup`

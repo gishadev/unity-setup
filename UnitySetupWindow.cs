@@ -11,9 +11,7 @@ namespace gishadev
     {
         static Texture2D _logo;
 
-        readonly HashSet<string> _selected = new();
         readonly List<string> _log = new();
-        Vector2 _optionsScroll;
         Vector2 _logScroll;
         bool _running;
 
@@ -27,40 +25,31 @@ namespace gishadev
         void OnGUI()
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Select what to set up", EditorStyles.boldLabel);
+            GUILayout.Label("Unity Setup", EditorStyles.boldLabel);
             GUILayout.FlexibleSpace();
             if (Logo != null)
                 GUILayout.Label(Logo, GUILayout.Width(48), GUILayout.Height(48));
             GUILayout.EndHorizontal();
-            
-            _optionsScroll = GUILayout.BeginScrollView(_optionsScroll, GUILayout.MaxHeight(200));
-            foreach (var step in ProjectSetup.Steps)
-            {
-                bool wasSelected = _selected.Contains(step.Name);
-                bool isSelected = EditorGUILayout.ToggleLeft(step.Name, wasSelected, EditorStyles.boldLabel);
-                if (isSelected != wasSelected)
-                {
-                    if (isSelected) _selected.Add(step.Name);
-                    else _selected.Remove(step.Name);
-                }
-
-                EditorGUILayout.LabelField(step.Description, EditorStyles.wordWrappedMiniLabel);
-                GUILayout.Space(4);
-            }
-
-            GUILayout.EndScrollView();
-
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Select All")) SelectAll(true);
-            if (GUILayout.Button("Select None")) SelectAll(false);
-            GUILayout.EndHorizontal();
 
             GUILayout.Space(4);
 
-            using (new EditorGUI.DisabledScope(_running || _selected.Count == 0))
+            foreach (var step in ProjectSetup.Steps)
             {
-                if (GUILayout.Button("Run Selected", GUILayout.Height(28)))
-                    Run();
+                GUILayout.BeginVertical("box");
+
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(step.Name, EditorStyles.boldLabel);
+                GUILayout.FlexibleSpace();
+                using (new EditorGUI.DisabledScope(_running))
+                {
+                    if (GUILayout.Button("Run", GUILayout.Width(60)))
+                        Run(step);
+                }
+                GUILayout.EndHorizontal();
+
+                EditorGUILayout.LabelField(step.Description, EditorStyles.wordWrappedMiniLabel);
+
+                GUILayout.EndVertical();
             }
 
             GUILayout.Space(8);
@@ -75,36 +64,21 @@ namespace gishadev
                 _log.Clear();
         }
 
-        void SelectAll(bool select)
-        {
-            _selected.Clear();
-            if (!select) return;
-
-            foreach (var step in ProjectSetup.Steps)
-                _selected.Add(step.Name);
-        }
-
-        async void Run()
+        async void Run(SetupStep step)
         {
             _running = true;
-            _log.Clear();
 
-            foreach (var step in ProjectSetup.Steps)
+            Log($"── {step.Name} ──");
+            try
             {
-                if (!_selected.Contains(step.Name)) continue;
-
-                Log($"── {step.Name} ──");
-                try
-                {
-                    await step.Run(Log);
-                }
-                catch (Exception e)
-                {
-                    Log($"✗ {step.Name} failed: {e.Message}");
-                }
+                await step.Run(Log);
+                Log("Done.");
+            }
+            catch (Exception e)
+            {
+                Log($"✗ {step.Name} failed: {e.Message}");
             }
 
-            Log("Done.");
             _running = false;
         }
 
