@@ -243,7 +243,7 @@ namespace gishadev
 
             public static void CreateEnum(string enumName, Action<string> log)
             {
-                string path = $"Assets/_Project/Generated/{enumName}.cs";
+                string path = $"Assets/_Project/Scripts/Generated/{enumName}.cs";
 
                 var str = new StringBuilder();
                 str.AppendLine();
@@ -260,7 +260,7 @@ namespace gishadev
 
             public static void CreateExtensionsClass(Action<string> log)
             {
-                string path = "Assets/_Project/Generated/GeneratedExtensionMethods.cs";
+                string path = "Assets/_Project/Scripts/Generated/GeneratedExtensionMethods.cs";
 
                 var str = new StringBuilder();
                 str.AppendLine("using gishadev.tools.Audio;");
