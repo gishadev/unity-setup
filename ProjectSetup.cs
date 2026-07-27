@@ -88,6 +88,7 @@ namespace gishadev
             Folders.CreateEnum("SFXPoolEnum", log);
             Folders.CreateEnum("VFXPoolEnum", log);
             Folders.CreateEnum("OtherPoolEnum", log);
+            Folders.CreateExtensionsClass(log);
 
             await Packages.InstallPackages(new[]
             {
@@ -255,6 +256,31 @@ namespace gishadev
                 ImportAsset(path);
 
                 log($"✓ Created empty enum: {path}");
+            }
+
+            public static void CreateExtensionsClass(Action<string> log)
+            {
+                string path = "Assets/_Project/Generated/GeneratedExtensionMethods.cs";
+
+                var str = new StringBuilder();
+                str.AppendLine("using gishadev.tools.Audio;");
+                str.AppendLine("using gishadev.tools.Effects;");
+                str.AppendLine("using UnityEngine;");
+                str.AppendLine();
+                str.AppendLine("public static class GeneratedExtensionMethods");
+                str.AppendLine("{");
+                str.AppendLine("    public static void PlayMusic(this IAudioManager @this, MusicAudioEnum music) => @this.PlayMusic((int)music);");
+                str.AppendLine("    public static void PlaySFX(this IAudioManager @this, SFXAudioEnum sfx) => @this.PlaySFX((int)sfx);");
+                str.AppendLine("    public static GameObject EmitAt(this ISFXEmitter @this, SFXPoolEnum sfx, Vector3 position, Quaternion rotation) => @this.EmitAt((int)sfx, position, rotation);");
+                str.AppendLine("    public static GameObject EmitAt(this IVFXEmitter @this, VFXPoolEnum vfx, Vector3 position, Quaternion rotation) => @this.EmitAt((int)vfx, position, rotation);");
+                str.AppendLine("    public static GameObject EmitAt(this IOtherEmitter @this, OtherPoolEnum other, Vector3 position, Quaternion rotation) => @this.EmitAt((int)other, position, rotation);");
+                str.AppendLine("}");
+
+                Directory.CreateDirectory(GetDirectoryName(path) ?? string.Empty);
+                File.WriteAllText(path, str.ToString());
+                ImportAsset(path);
+
+                log($"✓ Created extension methods: {path}");
             }
         }
     }
