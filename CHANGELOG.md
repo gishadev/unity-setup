@@ -1,3 +1,7 @@
+## [1.2.1] - 2026-07-27
+### Fixed
+- Installing a package that brings new scripts (e.g. VContainer, then `tools-polish` right after it) could get interrupted by Unity's domain reload mid-step, silently dropping every install queued after the one that triggered it. Each step run now locks assembly reloads (`EditorApplication.LockReloadAssemblies`) until it's fully done
+
 ## [1.2.0] - 2026-07-27
 ### Changed
 - Simplified the Unity Setup window: removed the checkbox multi-select and batched "Run Selected" (which was buggy) in favor of one "Run" button per step that runs immediately on its own
