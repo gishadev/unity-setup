@@ -1,11 +1,14 @@
 {
   "name": "com.gishadev.unity-setup",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "displayName": "Unity Setup",
   "description": "Unity Setup Core",
   "unity": "6000.0",
   "author": {
     "name": "Bohdan Tsaplia",
     "url": "https://gishadev.com/"
+  },
+  "dependencies": {
+    "com.unity.ugui": "2.0.0"
   }
 }

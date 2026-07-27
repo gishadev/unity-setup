@@ -1,3 +1,8 @@
+## [1.4.1] - 2026-07-27
+### Added
+- "Import Main Tools" now also creates a `GeneratedExtensionMethods.cs` stub alongside the enum stubs, so the Generated folder is complete straight after setup. It's intentionally an empty class: the real overloads reference `gishadev.tools` types that aren't installed yet at that point, and restating their signatures here would be the second copy that drifted before. `CodeGenerator` fills it in on the first GENERATE ENUMS
+- Declared `com.unity.ugui` in `package.json` — the setup window uses TextMeshPro's importer to pull in TMP Essential Resources
+
 ## [1.4.0] - 2026-07-27
 ### Removed
 - `Folders.CreateExtensionsClass` — `com.gishadev.tools` 1.5.0 regenerates that file itself alongside the enums, so setup writing its own copy was the second writer that let the two drift apart. Setup still creates the enum stubs
