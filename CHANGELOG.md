@@ -1,3 +1,10 @@
+## [1.3.0] - 2026-07-27
+### Added
+- `Folders.CreateExtensionsClass` now generates `GeneratedExtensionMethods.cs` as part of "Import Main Tools" — moved here from `gishadev.tools.Core.CodeGenerator` since it's static, one-time scaffolding rather than something that needs to re-run on every pool/audio data edit
+### Changed
+- Stub pool enums renamed: `SoundEffectsEnum` → `SFXPoolEnum`, `VisualEffectsEnum` → `VFXPoolEnum`
+- Generated `EmitAt` extension overloads now take `rotation` as optional, matching the updated `gishadev.tools` emitter signatures
+
 ## [1.2.1] - 2026-07-27
 ### Fixed
 - Installing a package that brings new scripts (e.g. VContainer, then `tools-polish` right after it) could get interrupted by Unity's domain reload mid-step, silently dropping every install queued after the one that triggered it. Each step run now locks assembly reloads (`EditorApplication.LockReloadAssemblies`) until it's fully done

@@ -271,9 +271,9 @@ namespace gishadev
                 str.AppendLine("{");
                 str.AppendLine("    public static void PlayMusic(this IAudioManager @this, MusicAudioEnum music) => @this.PlayMusic((int)music);");
                 str.AppendLine("    public static void PlaySFX(this IAudioManager @this, SFXAudioEnum sfx) => @this.PlaySFX((int)sfx);");
-                str.AppendLine("    public static GameObject EmitAt(this ISFXEmitter @this, SFXPoolEnum sfx, Vector3 position, Quaternion rotation) => @this.EmitAt((int)sfx, position, rotation);");
-                str.AppendLine("    public static GameObject EmitAt(this IVFXEmitter @this, VFXPoolEnum vfx, Vector3 position, Quaternion rotation) => @this.EmitAt((int)vfx, position, rotation);");
-                str.AppendLine("    public static GameObject EmitAt(this IOtherEmitter @this, OtherPoolEnum other, Vector3 position, Quaternion rotation) => @this.EmitAt((int)other, position, rotation);");
+                str.AppendLine("    public static GameObject EmitAt(this ISFXEmitter @this, SFXPoolEnum sfx, Vector3 position, Quaternion? rotation = null) => @this.EmitAt((int)sfx, position, rotation);");
+                str.AppendLine("    public static GameObject EmitAt(this IVFXEmitter @this, VFXPoolEnum vfx, Vector3 position, Quaternion? rotation = null) => @this.EmitAt((int)vfx, position, rotation);");
+                str.AppendLine("    public static GameObject EmitAt(this IOtherEmitter @this, OtherPoolEnum other, Vector3 position, Quaternion? rotation = null) => @this.EmitAt((int)other, position, rotation);");
                 str.AppendLine("}");
 
                 Directory.CreateDirectory(GetDirectoryName(path) ?? string.Empty);
