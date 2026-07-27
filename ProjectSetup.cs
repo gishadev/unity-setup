@@ -1,22 +1,55 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEditor;
 using UnityEditor.PackageManager;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using static System.IO.Path;
 using static UnityEditor.AssetDatabase;
 
 namespace gishadev
 {
+    public readonly struct SetupStep
+    {
+        public readonly string Name;
+        public readonly string Description;
+        public readonly Func<Action<string>, Task> Run;
+
+        public SetupStep(string name, string description, Func<Action<string>, Task> run)
+        {
+            Name = name;
+            Description = description;
+            Run = run;
+        }
+    }
+
     public static class ProjectSetup
     {
-        [MenuItem("Tools/Setup/Create Folders")]
-        public static void CreateFolders()
+        public static readonly SetupStep[] Steps =
         {
+            new("Create Folders",
+                "Scaffold the standard _Project folder structure.",
+                CreateFolders),
+            new("Import Essentials",
+                "Packages every project needs: 2D Animation, Cinemachine, Input System, UniTask, TextMeshPro.",
+                ImportEssentials),
+            new("Import Main Tools",
+                "VContainer, PrimeTween, com.gishadev.tools and generated pool enums.",
+                ImportPolishingTools),
+            new("Import Odin",
+                "Odin Inspector & Serializer (from Asset Store cache).",
+                ImportOdin),
+            new("Import Editor Helpers",
+                "vFolders 2 and vFavorites 2 (from Asset Store cache).",
+                ImportEditorHelpers),
+        };
+
+        static async Task CreateFolders(Action<string> log)
+        {
+            log("Creating folder structure...");
+
             Folders.Create("_Project", "Materials", "Prefabs", "Scripts");
             Refresh();
             Folders.Move("_Project", "Scenes");
@@ -27,58 +60,57 @@ namespace gishadev
                 "Assets/_Project/Settings/InputSystem_Actions.inputactions");
             DeleteAsset("Assets/Readme.asset");
             Refresh();
+
+            log("✓ Folder structure created.");
+            await Task.CompletedTask;
         }
 
-        [MenuItem("Tools/Setup/Import Essentials")]
-        static void ImportEssentials()
+        static async Task ImportEssentials(Action<string> log)
         {
-            // Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage",
-            //     "Kyrylo Kuzyk/Editor ExtensionsAnimation");
-
-            Packages.InstallPackages(new[]
+            await Packages.InstallPackages(new[]
             {
                 "com.unity.2d.animation",
                 "com.unity.cinemachine",
-                "com.unity.inputsystem"
-            });
+                "com.unity.inputsystem",
+                "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+            }, log);
+
+            await Assets.ImportTmpEssentials(log);
         }
 
-        [MenuItem("Tools/Setup/Import polishing tools")]
-        static void ImportPolishingTools()
+        static async Task ImportPolishingTools(Action<string> log)
         {
-            Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage",
-                "Kyrylo Kuzyk/Editor ExtensionsAnimation");
-            
-            Folders.CreateEnum("MusicAudioEnum");
-            Folders.CreateEnum("SFXAudioEnum");
-            Folders.CreateEnum("SoundEffectsEnum");
-            Folders.CreateEnum("VisualEffectsEnum");
-            Folders.CreateEnum("OtherPoolEnum");
+            await Assets.ImportAsset("PrimeTween High-Performance Animations and Sequences.unitypackage",
+                "Kyrylo Kuzyk/Editor ExtensionsAnimation", log);
 
-            Packages.InstallPackages(new[]
+            Folders.CreateEnum("MusicAudioEnum", log);
+            Folders.CreateEnum("SFXAudioEnum", log);
+            Folders.CreateEnum("SoundEffectsEnum", log);
+            Folders.CreateEnum("VisualEffectsEnum", log);
+            Folders.CreateEnum("OtherPoolEnum", log);
+
+            await Packages.InstallPackages(new[]
             {
                 "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.16.9",
-                "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
                 "https://github.com/gishadev/tools-polish.git"
-            });
+            }, log);
         }
 
-        [MenuItem("Tools/Setup/Import Odin")]
-        static void ImportOdin()
+        static async Task ImportOdin(Action<string> log)
         {
-            Assets.ImportAsset("Odin Inspector and Serializer.unitypackage", "Sirenix/Editor ExtensionsSystem");
+            await Assets.ImportAsset("Odin Inspector and Serializer.unitypackage", "Sirenix/Editor ExtensionsSystem",
+                log);
         }
 
-        [MenuItem("Tools/Setup/Import Editor Helpers")]
-        static void ImportEditorHelpers()
+        static async Task ImportEditorHelpers(Action<string> log)
         {
-            Assets.ImportAsset("vFolders 2.unitypackage", "kubacho lab/Editor ExtensionsUtilities");
-            Assets.ImportAsset("vFavorites 2.unitypackage", "kubacho lab/Editor ExtensionsUtilities");
+            await Assets.ImportAsset("vFolders 2.unitypackage", "kubacho lab/Editor ExtensionsUtilities", log);
+            await Assets.ImportAsset("vFavorites 2.unitypackage", "kubacho lab/Editor ExtensionsUtilities", log);
         }
 
         static class Assets
         {
-            public static void ImportAsset(string asset, string folder)
+            public static Task ImportAsset(string asset, string folder, Action<string> log)
             {
                 string basePath;
 #if UNITY_EDITOR_WIN
@@ -98,41 +130,68 @@ namespace gishadev
 
                 asset = asset.EndsWith(".unitypackage") ? asset : asset + ".unitypackage";
                 string fullPath = Combine(basePath, folder, asset);
+                string displayName = GetFileNameWithoutExtension(asset);
 
                 if (!File.Exists(fullPath))
-                    throw new FileNotFoundException($"The asset package was not found at the path: {fullPath}");
+                {
+                    log($"✗ {displayName} not found at: {fullPath}");
+                    return Task.CompletedTask;
+                }
 
-                ImportPackage(fullPath, false);
+                return AwaitImport(displayName, () => ImportPackage(fullPath, false), log);
+            }
+
+            public static Task ImportTmpEssentials(Action<string> log)
+            {
+                return AwaitImport("TMP Essential Resources",
+                    () => TMP_PackageResourceImporter.ImportResources(true, false, false), log);
+            }
+
+            static Task AwaitImport(string displayName, Action startImport, Action<string> log)
+            {
+                var tcs = new TaskCompletionSource<bool>();
+
+                void OnCompleted(string packageName)
+                {
+                    AssetDatabase.importPackageCompleted -= OnCompleted;
+                    AssetDatabase.importPackageFailed -= OnFailed;
+                    log($"✓ Imported {displayName}");
+                    tcs.TrySetResult(true);
+                }
+
+                void OnFailed(string packageName, string errorMessage)
+                {
+                    AssetDatabase.importPackageCompleted -= OnCompleted;
+                    AssetDatabase.importPackageFailed -= OnFailed;
+                    log($"✗ Failed to import {displayName}: {errorMessage}");
+                    tcs.TrySetResult(false);
+                }
+
+                AssetDatabase.importPackageCompleted += OnCompleted;
+                AssetDatabase.importPackageFailed += OnFailed;
+
+                log($"Importing {displayName}...");
+                startImport();
+
+                return tcs.Task;
             }
         }
 
         static class Packages
         {
-            static AddRequest _request;
-            static readonly Queue<string> PackagesToInstall = new();
-
-            public static void InstallPackages(string[] packages)
+            public static async Task InstallPackages(string[] packages, Action<string> log)
             {
                 foreach (var package in packages)
-                    PackagesToInstall.Enqueue(package);
-
-                if (PackagesToInstall.Count > 0)
-                    StartNextPackageInstallation();
-            }
-
-            static async void StartNextPackageInstallation()
-            {
-                _request = Client.Add(PackagesToInstall.Dequeue());
-
-                while (!_request.IsCompleted) await Task.Delay(10);
-
-                if (_request.Status == StatusCode.Success) Debug.Log("Installed: " + _request.Result.packageId);
-                else if (_request.Status >= StatusCode.Failure) Debug.LogError(_request.Error.message);
-
-                if (PackagesToInstall.Count > 0)
                 {
-                    await Task.Delay(1000);
-                    StartNextPackageInstallation();
+                    log($"Installing {package}...");
+
+                    var request = Client.Add(package);
+                    while (!request.IsCompleted) await Task.Delay(100);
+
+                    if (request.Status == StatusCode.Success)
+                        log($"✓ Installed {request.Result.packageId}");
+                    else if (request.Status >= StatusCode.Failure)
+                        log($"✗ Failed to install {package}: {request.Error.message}");
                 }
             }
         }
@@ -181,9 +240,9 @@ namespace gishadev
                     DeleteAsset(pathToDelete);
             }
 
-            public static void CreateEnum(string enumName)
+            public static void CreateEnum(string enumName, Action<string> log)
             {
-                string path = $"Assets/Generated/{enumName}.cs";
+                string path = $"Assets/_Project/Generated/{enumName}.cs";
 
                 var str = new StringBuilder();
                 str.AppendLine();
@@ -195,7 +254,7 @@ namespace gishadev
                 File.WriteAllText(path, str.ToString());
                 ImportAsset(path);
 
-                Debug.Log($"[EnumGenerator] Created empty enum: {path}");
+                log($"✓ Created empty enum: {path}");
             }
         }
     }
